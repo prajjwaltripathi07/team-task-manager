@@ -1,6 +1,6 @@
 # Team Task Manager
 
-A complete full-stack MERN application for managing team tasks. Built with role-based access control (Admin and Member).
+A complete full-stack MERN application for managing team tasks. Built with role-based access control (Admin and Member). Designed to be simple, fast, and efficient.
 
 ## Tech Stack
 - **Frontend**: React + Vite + Tailwind CSS + React Router + Axios
