@@ -52,29 +52,35 @@ A complete full-stack MERN application for managing team tasks. Built with role-
 
 ## Deployment on Railway
 
-Deploying a MERN stack on Railway is straightforward. We can deploy them as two separate services for simplicity and better scaling.
+Deploying a MERN stack monorepo on Railway is straightforward when deployed as **two separate services** within the same project. 
 
-### Option 1: Deploy Backend and Frontend as separate Railway services
+### Step 1: Database Setup
+1. Create a free M0 Sandbox cluster on **MongoDB Atlas**.
+2. Under **Database Access**, create a database user and save the username and password.
+3. Under **Network Access**, allow access from anywhere by adding IP `0.0.0.0/0` (this is required for Railway to connect).
+4. Get your connection string and insert your database name (e.g., `team-task-manager`) before the `?` in the URL.
+
+### Step 2: Backend Service Deployment
 1. Push this repository to GitHub.
-2. Go to [Railway](https://railway.app/) and create a new project.
-3. Select **Deploy from GitHub repo**.
-
-#### Backend Service Setup:
-1. Select the repository.
-2. In the deployment settings, change the **Root Directory** to `/backend`.
-3. Go to the **Variables** tab and add your production variables:
+2. In Railway, click **New Project** -> **Deploy from GitHub repo** and select this repository.
+3. Once the service card is created, click it and go to the **Settings** tab.
+4. Set the **Root Directory** to `/backend`.
+5. Under **Networking**, click **Generate Domain**.
+6. Go to the **Variables** tab and add the following:
    - `MONGO_URI`: Your MongoDB Atlas connection string.
-   - `JWT_SECRET`: A strong secret key.
-   - `PORT`: Railway will automatically set this, but you can set it to `5000`.
-4. Railway will automatically detect Node.js and run `npm start` (make sure you add `"start": "node server.js"` in `backend/package.json`).
+   - `JWT_SECRET`: A strong secret key for authentication.
+   - `NODE_ENV`: `production`
+7. Wait for the backend to build and show a green Success checkmark. Copy the generated domain URL.
 
-#### Frontend Service Setup:
-1. Go back to your Railway project dashboard.
-2. Click **New** -> **GitHub Repo** and select the same repository again.
-3. In the deployment settings, change the **Root Directory** to `/frontend`.
-4. Go to the **Variables** tab and add:
-   - `VITE_API_URL`: The public URL of your deployed Backend service (e.g., `https://your-backend.up.railway.app/api`).
-5. Railway will detect it's a Vite static site and will run `npm run build` and serve the static files.
+### Step 3: Frontend Service Deployment
+1. In your Railway project, click **+ New** -> **GitHub Repo** and select the same repository again.
+2. Click the new service card and go to the **Settings** tab.
+3. Set the **Root Directory** to `/frontend`.
+4. Under **Networking**, click **Generate Domain** (Leave the port box empty if prompted).
+5. Go to the **Variables** tab and add:
+   - `VITE_API_URL`: The public URL of your deployed backend service with `/api` appended (e.g., `https://your-backend-app.up.railway.app/api`).
+   - `PORT`: `3000` (Forces the app to match the standard port for the `serve` package).
+6. Railway will detect the `start` script, build the Vite app, and serve it statically.
 
 ## Features & Roles
 - **Signup / Login**: Secure JWT authentication.
